@@ -12,6 +12,8 @@ from transformers import AutoTokenizer
 # abstract class for tokenizers inheriting from ABC
 class TokenizerInterface(ABC):
 
+    NOT_COMPLETE_SYMBOL_ORD = None
+
     @abstractmethod
     def encode(self, text: str) -> List[int]:
         raise NotImplementedError
@@ -73,6 +75,35 @@ class TokenizerInterface(ABC):
         else:
             raise ValueError(f"Invalid input type for print_pretty. Must be str or list of ints. Found {type(test_or_tokens)}")
 
+    def align_tokens_to_text(self, tokens, reverse=False):
+        processed_tokens = []
+        processed_strs = []
+
+        pred = []
+        for t in tokens:
+            unicode_error = False
+            dec = ""
+
+            curr = pred + [t]
+
+            try:
+                dec = self.decode(curr)
+            except UnicodeDecodeError:
+                unicode_error = True
+
+            if (len(dec) > 1) or (len(dec)==1 and ord(dec) != self.NOT_COMPLETE_SYMBOL_ORD) or unicode_error:
+                processed_tokens.append(tuple(curr))
+                processed_strs.append(dec)
+                pred = []
+            else:
+                pred.append(t)
+
+        if reverse:
+            processed_tokens = processed_tokens[::-1]
+            processed_strs = processed_strs[::-1]
+
+        return processed_tokens, processed_strs
+
     def latex_pretty(self, text, font="", reverse=False):
         tokens = self.encode(text)
         processed_tokens = []
@@ -125,11 +156,15 @@ class TokenizerInterface(ABC):
         raise NotImplementedError
 
 class UTF32_Tokenizer(TokenizerInterface):
+
     def encode(self, text: str) -> List[int]:
-        return [int(x) for x in text.encode("utf_32_be")]
+        encoded = text.encode("utf_32_be")
+        encoded = [int.from_bytes(encoded[i*4:(i+1)*4], byteorder="big") for i in range(len(encoded)//4)]
+        return encoded
     
     def decode(self, tokens: List[int]) -> str:
-        return bytes(tokens).decode("utf_32_be")
+        tokens_bytes = [t.to_bytes(length=4, byteorder="big") for t in tokens]
+        return b"".join(tokens_bytes).decode("utf_32_be")
     
     @property
     def pretty_name(self) -> str:
@@ -187,7 +222,7 @@ class OpenAI_cl100k_base(OpenAITokenizer):
 class HuggingFaceTokenizer(TokenizerInterface):
     tokenizer = None
     tokenizer_name = "NotValid"
-    NOT_COMPLETE_SYMBOL_ORD = None
+    NOT_COMPLETE_SYMBOL_ORD = 65533
 
     def __init__(self):
         if self.tokenizer is None:
