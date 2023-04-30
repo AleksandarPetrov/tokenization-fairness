@@ -69,17 +69,31 @@ processed_dicts_list = pool.map(process_one_language, langs)
 pool.close()
 pool.join()
 
+# replace language code with language full name
 language_map = pandas.read_csv("compute/flores_language_map.csv", index_col=1, skipinitialspace=True)
-# language_map.rename(columns={"Language": "Language"}, inplace=True)
 language_map["Language"] = language_map["Language"].str.strip()
 
-
+# save the raw tokenization lengths
 df = pandas.DataFrame([d[0] for d in processed_dicts_list]).set_index("lang")
 df = pandas.merge(df, language_map, left_index=True, right_index=True)
 df.set_index("Language", inplace=True)
 df.to_csv("assets/tokenization_lengths.csv")
 
+# save the raw numbers of unknown tokens
 df_unknown = pandas.DataFrame([d[1] for d in processed_dicts_list]).set_index("lang")
 df_unknown = pandas.merge(df_unknown, language_map, left_index=True, right_index=True)
 df_unknown.set_index("Language", inplace=True)
 df_unknown.to_csv("assets/tokenization_unknown.csv")
+
+# save the fraction of unknown tokens
+assert((df.columns == df_unknown.columns).all())
+assert((df.index == df_unknown.index).all())
+df_unknown_fraction = df_unknown.copy()
+for col in df.columns:
+    df_unknown_fraction[col] /= df[col]
+df_unknown_fraction.to_csv("assets/tokenization_unknown_fraction.csv")
+
+# NaN the rows for which we have too many unknown tokens
+THRESHOLD_FOR_TOO_MANY_UNKNOWN = 0.1
+df[df_unknown_fraction > THRESHOLD_FOR_TOO_MANY_UNKNOWN] = "–––"
+df.to_csv("assets/tokenization_lengths_validated.csv")

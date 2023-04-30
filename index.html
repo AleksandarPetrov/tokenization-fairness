@@ -31,7 +31,7 @@
 
     $(document).ready(function() {
         // Load the data from the CSV file
-        $.get("assets/tokenization_lengths.csv", async=false, function(data) {
+        $.get("assets/tokenization_lengths_validated.csv", async=false, function(data) {
             // Parse the CSV data into an array of objects
             var dataArray =  Papa.parse(data, { header: true, skipEmptyLines: true }).data;
 
@@ -57,18 +57,27 @@
             }
 
             // Initialize the DataTable
-            var table = $('#myTable').DataTable({
-                data: dataArray,
-                columns: tableColumns,
-                paging: false,
-                searching: true,
-                language: {
-                    info: '', 
-                    infoEmpty: '',
-                    infoFiltered: '',
-                    zeroRecords: 'No records found'
-                }
-            });
+
+            function init_table(dataArray){
+                return $('#myTable').DataTable({
+                    data: dataArray,
+                    render: function(data, type, row) {
+                        return isNaN(Number(data)) ? '—' : data;
+                    },
+                    columns: tableColumns,
+                    paging: false,
+                    searching: true,
+                    language: {
+                        info: '', 
+                        infoEmpty: '',
+                        infoFiltered: '',
+                        zeroRecords: 'No records found'
+                    },
+                    "bDestroy": true
+                });
+            }
+
+            var table = init_table(dataArray);
 
             // Get the data for the first column (assumes that the first column contains unique IDs for each row)
             var rowsData = table.column(0).data().toArray();
@@ -149,21 +158,26 @@
                 'Tumbuka',
                 'Vietnamese'
             ]).trigger('change');
-            dropdown_col.val(["GPT-2", ""]).trigger("change");
+            dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
 
             // Function to divide rows of the table
             function divideDicts(dict1, dict2) {
                 const result = {};
                 for (let key in dict1) {
+                    if (key == "Language"){
+                        result[key] = dict1[key];
+                        continue;
+                    }
+
                     if (!dict1.hasOwnProperty(key) || !dict2.hasOwnProperty(key)) {
                         continue;
                     }
                     const val1 = dict1[key];
                     const val2 = dict2[key];
-                    if (! isNaN(Number(val1)) && ! isNaN(Number(val2)) && val2 !== 0) {
+                    if (! isNaN(Number(val1)) && ! isNaN(Number(val2)) && Number(val2) !== 0) {
                         result[key] = (parseFloat(val1) / parseFloat(val2)).toFixed(2);
                     } else {
-                        result[key] = val1;
+                        result[key] = "–––";
                     }
                 }
                 return result;
@@ -171,24 +185,30 @@
 
             // Update the table when the base language changes
             dropdown_base.on('change', function() {
+
+                // Reset the table data
+                table = init_table(dataArray);
+                console.log(dataArray);
+
+                // Find the row matching the selected base language
                 var matchingRowId = null;
                 var rowData = null;
                 table.rows().every(function(rowIdx, tableLoop, rowLoop) {
                     rowData = table.row(rowIdx).data();
                     if (rowData['Language'] === dropdown_base.val()) {
                         matchingRowId = rowIdx;
-                        console.log(matchingRowId);
                         return false; // exit the loop early if we find a match
                     }
                 });
                 var divisionRow = table.row(matchingRowId).data();
 
                 // Loop through each row of the table
-                table.data(dataArray);
                 table.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                    // Get the row data
-                    var rowData = this.data();
-                    this.data(divideDicts(rowData, divisionRow)).draw();
+                    if (rowIdx > 0){
+                        // Get the row data
+                        var rowData = this.data();
+                        this.data(divideDicts(rowData, divisionRow));
+                    };
                 });
 
                 table.draw();
