@@ -244,7 +244,7 @@ class HuggingFaceTokenizer(TokenizerInterface):
         tokens = self.encode(text)
         tokens_wo_unk = [t for t in tokens if t != unknown_token]
         text_wo_unk = self.decode(tokens_wo_unk)
-        return int(len(tokens)*(len(text)-len(text_wo_unk))/len(text))
+        return max(0, int(len(tokens)*(len(text)-len(text_wo_unk))/len(text)))
 
 
 class FacebookAI_XMLR_Base(HuggingFaceTokenizer):

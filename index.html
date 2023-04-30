@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive DataTable</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /></head>
+<body>
+  <div class="container">
+    <select id="row-selector" class="js-example-basic-multiple" style="min-width: 200px;" multiple>
+    </select> 
+    <select id="col-selector" class="js-example-basic-multiple" style="min-width: 200px;" multiple>
+    </select> 
+    <select id="base-language-selector" class="js-example-basic-multiple" style="min-width: 200px;">
+    </select>       
+    
+    <table id="myTable" class="display">
+      <thead>
+        <tr>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  <script type="text/javascript">
+
+    $(document).ready(function() {
+        // Load the data from the CSV file
+        $.get("assets/tokenization_lengths.csv", async=false, function(data) {
+            // Parse the CSV data into an array of objects
+            var dataArray =  Papa.parse(data, { header: true, skipEmptyLines: true }).data;
+
+            // Get the column names from the first row of data
+            var columnNames = Object.keys(dataArray[0]);
+
+            // Generate the DataTable columns based on the column names
+            var tableColumns = columnNames.map(function(columnName) {
+                return { data: columnName, title: columnName };
+            });
+
+            // Update the number of columns in the table
+            var table_body = document.getElementById("myTable");
+            if (columnNames.length !== table_body.rows[0].cells.length) {
+            // Update the number of columns in the table
+                while (table_body.rows[0].cells.length < columnNames.length) {
+                    const cell = table_body.rows[0].insertCell(-1);
+                    cell.outerHTML = "<th style='max-width:100%; white-space:nowrap;'>New Column</th>";
+                }
+                while (table_body.rows[0].cells.length > columnNames.length) {
+                    table_body.rows[0].deleteCell(-1);
+                }
+            }
+
+            // Initialize the DataTable
+            var table = $('#myTable').DataTable({
+                data: dataArray,
+                columns: tableColumns,
+                paging: false,
+                searching: true,
+                language: {
+                    info: '', 
+                    infoEmpty: '',
+                    infoFiltered: '',
+                    zeroRecords: 'No records found'
+                }
+            });
+
+            // Get the data for the first column (assumes that the first column contains unique IDs for each row)
+            var rowsData = table.column(0).data().toArray();
+
+            // Get the dropdown element
+            var dropdown_row = $('#row-selector');
+            var dropdown_col = $('#col-selector');
+            var dropdown_base = $('#base-language-selector');
+            dropdown_row.select2();
+            dropdown_col.select2();
+            dropdown_base.select2();
+
+            // Add an option for each row
+            rowsData.forEach(function(rowId) {
+                var option = $('<option value="' + rowId + '">' + rowId + '</option>');
+                dropdown_row.append(option);
+            });
+            rowsData.forEach(function(rowId) {
+                var option = $('<option value="' + rowId + '">' + rowId + '</option>');
+                dropdown_base.append(option);
+            });
+            columnNames.slice(1).forEach(function(colId) {
+                var option = $('<option value="' + colId + '">' + colId + '</option>');
+                dropdown_col.append(option);
+            });
+
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                var selectedRowIds = dropdown_row.val();
+                var rowId = data[0]; // Assuming the row ID is in the first column
+            
+                if (selectedRowIds.includes(rowId)) {
+                    return true;
+                }
+            
+                return false;
+            });
+
+
+
+            // Handle changes to the dropdown and checkboxes
+            dropdown_row.on('change', function() {
+                table.draw();
+            });
+            dropdown_col.on('change', function() {
+                var originalWidth = document.getElementById("myTable").style.width;
+                table.columns().header().each(function(columnHeader, index) {
+                    var caption = $(columnHeader).text();
+                    var columnVisible = dropdown_col.val().indexOf(caption) !== -1;
+                    if (index > 0){
+                        table.column(index).visible(columnVisible);
+                    }
+                });
+                table.draw();
+                table.columns.adjust();
+                document.getElementById("myTable").width = "1%"; 
+                document.getElementById("myTable").style.width = "1%"; 
+            });
+
+            // Select a default subset of the options
+            dropdown_row.val([
+                'Bulgarian',
+                'Burmese',
+                'Chinese (Simplified)',
+                'Dzongkha',
+                'English',
+                'French',
+                'German',
+                'Italian',
+                'Japanese',
+                'Maori',
+                'Pangasinan',
+                'Portuguese',
+                'Romanian',
+                'Santali',
+                'Shan',
+                'Spanish',
+                'Standard Arabic',
+                'Tumbuka',
+                'Vietnamese'
+            ]).trigger('change');
+            dropdown_col.val(["GPT-2", ""]).trigger("change");
+
+            // Function to divide rows of the table
+            function divideDicts(dict1, dict2) {
+                const result = {};
+                for (let key in dict1) {
+                    if (!dict1.hasOwnProperty(key) || !dict2.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    const val1 = dict1[key];
+                    const val2 = dict2[key];
+                    if (! isNaN(Number(val1)) && ! isNaN(Number(val2)) && val2 !== 0) {
+                        result[key] = (parseFloat(val1) / parseFloat(val2)).toFixed(2);
+                    } else {
+                        result[key] = val1;
+                    }
+                }
+                return result;
+            }
+
+            // Update the table when the base language changes
+            dropdown_base.on('change', function() {
+                var matchingRowId = null;
+                var rowData = null;
+                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                    rowData = table.row(rowIdx).data();
+                    if (rowData['Language'] === dropdown_base.val()) {
+                        matchingRowId = rowIdx;
+                        console.log(matchingRowId);
+                        return false; // exit the loop early if we find a match
+                    }
+                });
+                var divisionRow = table.row(matchingRowId).data();
+
+                // Loop through each row of the table
+                table.data(dataArray);
+                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                    // Get the row data
+                    var rowData = this.data();
+                    this.data(divideDicts(rowData, divisionRow)).draw();
+                });
+
+                table.draw();
+            });
+
+            dropdown_base.val("English").trigger('change');
+
+
+        });
+    });
+  </script>
+</body>
+</html>

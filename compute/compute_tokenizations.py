@@ -54,9 +54,32 @@ def process_one_language(lang, reverse=False):
     # save the examples:
     os.makedirs("assets/examples", exist_ok=True)
     df=pandas.DataFrame(examples_tokenized)
-    df.to_json(f"assets/examples/{lang}.json")
+    print(df)
+    df.to_json(f"assets/examples/{lang}.json", force_ascii=False, indent=2)
 
     return dict_len, dict_unknown
 
 
-process_one_language("jpn_Jpan")
+# process the one language not in parallel in order to download the models if needed
+_ = process_one_language(langs[0])
+
+# process all languages in parallel
+pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+processed_dicts_list = pool.map(process_one_language, langs)
+pool.close()
+pool.join()
+
+language_map = pandas.read_csv("compute/flores_language_map.csv", index_col=1, skipinitialspace=True)
+# language_map.rename(columns={"Language": "Language"}, inplace=True)
+language_map["Language"] = language_map["Language"].str.strip()
+
+
+df = pandas.DataFrame([d[0] for d in processed_dicts_list]).set_index("lang")
+df = pandas.merge(df, language_map, left_index=True, right_index=True)
+df.set_index("Language", inplace=True)
+df.to_csv("assets/tokenization_lengths.csv")
+
+df_unknown = pandas.DataFrame([d[1] for d in processed_dicts_list]).set_index("lang")
+df_unknown = pandas.merge(df_unknown, language_map, left_index=True, right_index=True)
+df_unknown.set_index("Language", inplace=True)
+df_unknown.to_csv("assets/tokenization_unknown.csv")
