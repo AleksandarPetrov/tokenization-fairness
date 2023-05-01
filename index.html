@@ -5,7 +5,87 @@
   <title>Interactive DataTable</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /></head>
+  <!-- <style>
+    .stripes {
+      background-image: linear-gradient(to right, red, red 33.33%, white 33.33%, white 66.67%, blue 66.67%, blue);
+      background-clip: content-box;
+      /* padding: 0 4px; */
+    }
+    h1 .example{
+      background-color: white;
+      display: inline-block;
+      font-size: 4em;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      text-transform: uppercase;
+    }
+    h1:before .example {
+      /* background-image: linear-gradient(to right, red, red 33.33%, white 33.33%, white 66.67%, blue 66.67%, blue); */
+      content: "";
+      height: 100%;
+      /* left: -4px; */
+      position: absolute;
+      top: 0;
+      /* width: calc(100% + 8px); */
+      z-index: -1;
+    }
+  </style> -->
+  <style>
+
+    .text {
+      font-size: 2em;
+    }
+
+    .token {
+      padding: 0 0.02em;
+      margin: 0; 
+      font-size: 2em;
+      position: relative;
+    }
+
+    .token-text {
+      /* display: none; */
+      /* content: ""; */
+      white-space: pre-wrap;
+      /* position: absolute; */
+      font-size: 2em;
+      /* font-weight: bold; */
+      /* text-transform: uppercase; */
+      position: relative;
+      padding-left: 0.0em;
+      padding-right: 0.0em;
+      margin: 0em; 
+      height: 5em;
+    }
+
+    .separator {
+        font-size:0
+    }
+
+    .example {
+        width: 50%;
+        font-family: "Noto Sans Mono", monospace;
+    }
+
+    .text-container .tokens-container .tokens-token-text{
+        width:fit-content;
+    }
+  </style>
 <body>
+
+   <h1 class="example"><span class="stripes">H</span><span class="stripes">e</span><span class="stripes">l</span><span class="stripes">l</span><span class="stripes">o</span></h1>
+
+    <div id="example1" class="example">
+        <div id="example1-text" class="text-container"></div>
+        <br>
+        <div id="example1-token-text" class="tokens-token-text"></div>
+        <br>
+        <div id="example1-tokens" class="tokens-container"></div>
+    </div>
+    <br><br>
+
   <div class="container">
     <select id="row-selector" class="js-example-basic-multiple" style="min-width: 200px;" multiple>
     </select> 
@@ -24,10 +104,15 @@
       </tbody>
     </table>
   </div>
+
+
+
+
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  <script type="text/javascript">
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  
+  <script type="text/javascript">
 
     $(document).ready(function() {
         // Load the data from the CSV file
@@ -37,6 +122,7 @@
 
             // Get the column names from the first row of data
             var columnNames = Object.keys(dataArray[0]);
+            var tokenizerNames = columnNames.slice(1).sort();
 
             // Generate the DataTable columns based on the column names
             var tableColumns = columnNames.map(function(columnName) {
@@ -99,7 +185,7 @@
                 var option = $('<option value="' + rowId + '">' + rowId + '</option>');
                 dropdown_base.append(option);
             });
-            columnNames.slice(1).forEach(function(colId) {
+            tokenizerNames.forEach(function(colId) {
                 var option = $('<option value="' + colId + '">' + colId + '</option>');
                 dropdown_col.append(option);
             });
@@ -158,7 +244,6 @@
                 'Tumbuka',
                 'Vietnamese'
             ]).trigger('change');
-            dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
 
             // Function to divide rows of the table
             function divideDicts(dict1, dict2) {
@@ -188,7 +273,6 @@
 
                 // Reset the table data
                 table = init_table(dataArray);
-                console.log(dataArray);
 
                 // Find the row matching the selected base language
                 var matchingRowId = null;
@@ -212,13 +296,101 @@
                 });
 
                 table.draw();
+                dropdown_col.trigger('change');
             });
 
             dropdown_base.val("English").trigger('change');
+            dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
 
 
         });
     });
   </script>
+
+  <script type="text/javascript">
+    var colors = ["#bf91ba","#6ccff6","#b4dc7f","#feffa5","#fcaf58"];
+
+    var examples = null;
+    var tokenizer = "ByT5"
+    $.ajax({
+        dataType: "json",
+        // url: "assets/examples/shn_Mymr.json", 
+        // url: "assets/examples/bul_Cyrl.json", 
+        // url: "assets/examples/eng_Latn.json", 
+        url: "assets/examples/jpn_Jpan.json", 
+        async: false,
+        success: function(json) {
+            examples = json[tokenizer];
+        }
+    });
+
+    var example = examples[0];
+
+    console.log(example);
+
+    var divElement = null;
+    
+    divElement = document.getElementById("example1-text");
+    var spanElement = document.createElement("span");
+    var spanText = document.createTextNode(example["text"].join(''));
+    spanElement.appendChild(spanText);
+    spanElement.classList.add("text");
+    divElement.appendChild(spanElement);
+
+    divElement = document.getElementById("example1-tokens");
+    var nextColorIndex = 0;
+    example["tokens"].flat().forEach(element => {
+        var spanElement = document.createElement("span");
+        var spanText = document.createTextNode(element);
+        spanElement.appendChild(spanText);
+        spanElement.classList.add("token");
+        spanElement.style.backgroundColor = colors[nextColorIndex % colors.length];
+        divElement.appendChild(spanElement);
+                // add a separator that is an empty span in order to prevent diacritics from combining across tokens
+                spanElement = document.createElement("span");
+        spanText = document.createTextNode(" ");
+        spanElement.appendChild(spanText);
+        spanElement.classList.add("separator");
+        divElement.appendChild(spanElement);
+
+        nextColorIndex += 1;
+    });
+
+    divElement = document.getElementById("example1-token-text");
+    nextColorIndex = 0;
+    example["text"].forEach((element, i) => {
+        var spanElement = document.createElement("span");
+        var spanText = document.createTextNode(element);
+        var nTokens = example["tokens"][i].length;
+        // var nextColorIndex = colorCounter % colors.length;
+        spanElement.appendChild(spanText);
+        spanElement.classList.add("token-text");
+
+        var bgColor = "linear-gradient(to right, ";
+        console.log(element);
+        for (var i = 0; i < nTokens; i++) {
+            var colorIndex = nextColorIndex % colors.length;
+            console.log(colorIndex);
+            bgColor += `${colors[colorIndex]} ${100/nTokens*i}%, ${colors[colorIndex]} ${100/nTokens*i}%, `;
+            bgColor += `${colors[colorIndex]} ${100/nTokens*(i+1)}%, ${colors[colorIndex]} ${100/nTokens*(i+1)}%`;
+            if (i < nTokens - 1) {
+                bgColor += ",";
+            }
+            nextColorIndex += 1;
+        }
+        spanElement.style.backgroundImage = bgColor+")";
+        divElement.appendChild(spanElement);
+
+        // add a separator that is an empty span in order to prevent diacritics from combining across tokens
+        spanElement = document.createElement("span");
+        spanText = document.createTextNode(" ");
+        spanElement.appendChild(spanText);
+        spanElement.classList.add("separator");
+        divElement.appendChild(spanElement);
+
+    });
+  </script>
+
+
 </body>
 </html>
