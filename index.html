@@ -1,396 +1,567 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>Interactive DataTable</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css"/>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /></head>
-  <!-- <style>
-    .stripes {
-      background-image: linear-gradient(to right, red, red 33.33%, white 33.33%, white 66.67%, blue 66.67%, blue);
-      background-clip: content-box;
-      /* padding: 0 4px; */
-    }
-    h1 .example{
-      background-color: white;
-      display: inline-block;
-      font-size: 4em;
-      font-weight: bold;
-      margin: 0;
-      padding: 0;
-      position: relative;
-      text-transform: uppercase;
-    }
-    h1:before .example {
-      /* background-image: linear-gradient(to right, red, red 33.33%, white 33.33%, white 66.67%, blue 66.67%, blue); */
-      content: "";
-      height: 100%;
-      /* left: -4px; */
-      position: absolute;
-      top: 0;
-      /* width: calc(100% + 8px); */
-      z-index: -1;
-    }
-  </style> -->
-  <style>
+    <meta charset="UTF-8">
+    <title>Interactive DataTable</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"
+        rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
 
-    .text {
-      font-size: 2em;
-    }
+    <meta name="theme-color" content="#712cf9">
 
-    .token {
-      padding: 0 0.02em;
-      margin: 0; 
-      font-size: 2em;
-      position: relative;
-    }
 
-    .token-text {
-      /* display: none; */
-      /* content: ""; */
-      white-space: pre-wrap;
-      /* position: absolute; */
-      font-size: 2em;
-      /* font-weight: bold; */
-      /* text-transform: uppercase; */
-      position: relative;
-      padding-left: 0.0em;
-      padding-right: 0.0em;
-      margin: 0em; 
-      height: 5em;
-    }
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
 
-    .separator {
-        font-size:0
-    }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
 
-    .example {
-        width: 50%;
-        font-family: "Noto Sans Mono", monospace;
-    }
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-    .text-container .tokens-container .tokens-token-text{
-        width:fit-content;
-    }
-  </style>
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+    </style>
+
+    <style>
+        .text {
+            font-size: 2em;
+        }
+
+        .token {
+            padding: 0 0.02em;
+            margin: 0;
+            font-size: 2em;
+            position: relative;
+        }
+
+        .token-text {
+            /* display: none; */
+            /* content: ""; */
+            white-space: pre-wrap;
+            /* position: absolute; */
+            font-size: 2em;
+            /* font-weight: bold; */
+            /* text-transform: uppercase; */
+            position: relative;
+            padding-left: 0.0em;
+            padding-right: 0.0em;
+            margin: 0em;
+            height: 5em;
+        }
+
+        .separator {
+            font-size: 0
+        }
+
+        .example {
+            width: 50%;
+            font-family: "Noto Sans Mono", monospace;
+        }
+
+        .text-container .tokens-container .tokens-token-text {
+            width: fit-content;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+</head>
+
 <body>
 
-   <h1 class="example"><span class="stripes">H</span><span class="stripes">e</span><span class="stripes">l</span><span class="stripes">l</span><span class="stripes">o</span></h1>
-
-    <div id="example1" class="example">
-        <div id="example1-text" class="text-container"></div>
-        <br>
-        <div id="example1-token-text" class="tokens-token-text"></div>
-        <br>
-        <div id="example1-tokens" class="tokens-container"></div>
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold text-body-emphasis">Language Model (or Models?) Tokenizers Introduce Unfairness
+            Between Languages</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4"><b>List of authors</b> </p>
+        </div>
     </div>
-    <br><br>
 
-  <div class="container">
-    <select id="row-selector" class="js-example-basic-multiple" style="min-width: 200px;" multiple>
-    </select> 
-    <select id="col-selector" class="js-example-basic-multiple" style="min-width: 200px;" multiple>
-    </select> 
-    <select id="base-language-selector" class="js-example-basic-multiple" style="min-width: 200px;">
-    </select>       
-    
-    <table id="myTable" class="display">
-      <thead>
-        <tr>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
+    <div class="b-example-divider"></div>
+
+    <div class="px-4 pt-5 my-5 text-center border-bottom">
+        <h1 class="display-8 fw-bold text-body-emphasis">Check your own languages</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s
+                most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
+                extensive prebuilt components, and powerful JavaScript plugins.</p>
+        </div>
+        <div class="" , style="">
+            <div class="container">
+                <div class="mb-3">
+                    <label for="row-selector" class="form-label">Select your languages:</label>
+                    <select id="row-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="col-selector" class="form-label">Select your models:</label>
+                    <select id="col-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="base-language-selector" class="form-label">Which language should we measure tokenization
+                        lengths against:</label>
+                    <select id="base-language-selector" class="js-example-basic" style="min-width: 200px;">
+                    </select>
+                </div>
+
+
+
+                <table id="myTable" class="display">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="b-example-divider"></div>
+
+    <table id="language-map-table" style="display:none;"></table>
+
+    <div class="px-4 pt-5 my-5 text-center border-bottom">
+        <h1 class="display-4 fw-bold text-body-emphasis">Compare tokenization of sentences</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s
+                most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
+                extensive prebuilt components, and powerful JavaScript plugins.</p>
+        </div>
+
+        <label for="example-tokenizer-selector" class="form-label">Pick tokenizer:</label>
+        <select id="example-tokenizer-selector" class="js-example-basic" style="min-width: 200px;">
+        </select>
+
+        <label for="sentence-selector" class="form-label">Scroll for other example sentences</label>
+        <input type="range" class="form-range" min="0" max="9" id="sentence-selector" value=5>
+
+        <div id="example1" class="example">
+
+            <div class="form-floating">
+            <select class="form-select" id="languageL" aria-label="Select language">
+            </select>
+            <label for="languageL">Select language:</label>
+            </div>
+
+            <div id="example1-text" class="text-container"></div>
+            <br>
+            <div id="example1-token-text" class="tokens-token-text"></div>
+            <br>
+            <div id="example1-tokens" class="tokens-container"></div>
+        </div>
+    </div>
 
 
 
 
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  
-  <script type="text/javascript">
 
-    $(document).ready(function() {
-        // Load the data from the CSV file
-        $.get("assets/tokenization_lengths_validated.csv", async=false, function(data) {
-            // Parse the CSV data into an array of objects
-            var dataArray =  Papa.parse(data, { header: true, skipEmptyLines: true }).data;
 
-            // Get the column names from the first row of data
-            var columnNames = Object.keys(dataArray[0]);
-            var tokenizerNames = columnNames.slice(1).sort();
 
-            // Generate the DataTable columns based on the column names
-            var tableColumns = columnNames.map(function(columnName) {
-                return { data: columnName, title: columnName };
-            });
 
-            // Update the number of columns in the table
-            var table_body = document.getElementById("myTable");
-            if (columnNames.length !== table_body.rows[0].cells.length) {
-            // Update the number of columns in the table
-                while (table_body.rows[0].cells.length < columnNames.length) {
-                    const cell = table_body.rows[0].insertCell(-1);
-                    cell.outerHTML = "<th style='max-width:100%; white-space:nowrap;'>New Column</th>";
-                }
-                while (table_body.rows[0].cells.length > columnNames.length) {
-                    table_body.rows[0].deleteCell(-1);
-                }
-            }
 
-            // Initialize the DataTable
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Load the data from the CSV file
+            $.get("assets/tokenization_lengths_validated.csv", async = false, function (data) {
+                // Parse the CSV data into an array of objects
+                var dataArray = Papa.parse(data, { header: true, skipEmptyLines: true }).data;
 
-            function init_table(dataArray){
-                return $('#myTable').DataTable({
-                    data: dataArray,
-                    render: function(data, type, row) {
-                        return isNaN(Number(data)) ? '—' : data;
-                    },
-                    columns: tableColumns,
-                    paging: false,
-                    searching: true,
-                    language: {
-                        info: '', 
-                        infoEmpty: '',
-                        infoFiltered: '',
-                        zeroRecords: 'No records found'
-                    },
-                    "bDestroy": true
+                // Get the column names from the first row of data
+                var columnNames = Object.keys(dataArray[0]);
+                var tokenizerNames = columnNames.slice(1).sort();
+
+                // Generate the DataTable columns based on the column names
+                var tableColumns = columnNames.map(function (columnName) {
+                    return { data: columnName, title: columnName };
                 });
-            }
 
-            var table = init_table(dataArray);
+                // Update the number of columns in the table
+                var table_body = document.getElementById("myTable");
+                if (columnNames.length !== table_body.rows[0].cells.length) {
+                    // Update the number of columns in the table
+                    while (table_body.rows[0].cells.length < columnNames.length) {
+                        const cell = table_body.rows[0].insertCell(-1);
+                        cell.outerHTML = "<th style='max-width:100%; white-space:nowrap;'>New Column</th>";
+                    }
+                    while (table_body.rows[0].cells.length > columnNames.length) {
+                        table_body.rows[0].deleteCell(-1);
+                    }
+                }
 
-            // Get the data for the first column (assumes that the first column contains unique IDs for each row)
-            var rowsData = table.column(0).data().toArray();
+                // Initialize the DataTable
 
-            // Get the dropdown element
-            var dropdown_row = $('#row-selector');
-            var dropdown_col = $('#col-selector');
-            var dropdown_base = $('#base-language-selector');
-            dropdown_row.select2();
-            dropdown_col.select2();
-            dropdown_base.select2();
+                function init_table(dataArray) {
+                    return $('#myTable').DataTable({
+                        data: dataArray,
+                        render: function (data, type, row) {
+                            return isNaN(Number(data)) ? '—' : data;
+                        },
+                        columns: tableColumns,
+                        paging: false,
+                        searching: true,
+                        language: {
+                            info: '',
+                            infoEmpty: '',
+                            infoFiltered: '',
+                            zeroRecords: 'No records found'
+                        },
+                        "bDestroy": true
+                    });
+                }
 
-            // Add an option for each row
-            rowsData.forEach(function(rowId) {
-                var option = $('<option value="' + rowId + '">' + rowId + '</option>');
-                dropdown_row.append(option);
+                var table = init_table(dataArray);
+
+                // Get the data for the first column (assumes that the first column contains unique IDs for each row)
+                var rowsData = table.column(0).data().toArray();
+
+                // Get the dropdown element
+                var dropdown_row = $('#row-selector');
+                var dropdown_col = $('#col-selector');
+                var dropdown_base = $('#base-language-selector');
+                dropdown_row.select2();
+                dropdown_col.select2();
+                dropdown_base.select2();
+
+                // Add an option for each row
+                rowsData.forEach(function (rowId) {
+                    var option = $('<option value="' + rowId + '">' + rowId + '</option>');
+                    dropdown_row.append(option);
+                });
+                rowsData.forEach(function (rowId) {
+                    var option = $('<option value="' + rowId + '">' + rowId + '</option>');
+                    dropdown_base.append(option);
+                });
+                tokenizerNames.forEach(function (colId) {
+                    var option = $('<option value="' + colId + '">' + colId + '</option>');
+                    dropdown_col.append(option);
+                });
+
+                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    var selectedRowIds = dropdown_row.val();
+                    var rowId = data[0]; // Assuming the row ID is in the first column
+
+                    if (selectedRowIds.includes(rowId)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+
+
+
+                // Handle changes to the dropdown and checkboxes
+                dropdown_row.on('change', function () {
+                    table.draw();
+                });
+                dropdown_col.on('change', function () {
+                    var originalWidth = document.getElementById("myTable").style.width;
+                    table.columns().header().each(function (columnHeader, index) {
+                        var caption = $(columnHeader).text();
+                        var columnVisible = dropdown_col.val().indexOf(caption) !== -1;
+                        if (index > 0) {
+                            table.column(index).visible(columnVisible);
+                        }
+                    });
+                    table.draw();
+                    table.columns.adjust();
+                    document.getElementById("myTable").width = "1%";
+                    document.getElementById("myTable").style.width = "1%";
+                });
+
+                // Select a default subset of the options
+                dropdown_row.val([
+                    'Bulgarian',
+                    'Burmese',
+                    'Chinese (Simplified)',
+                    'Dzongkha',
+                    'English',
+                    'French',
+                    'German',
+                    'Italian',
+                    'Japanese',
+                    'Maori',
+                    'Pangasinan',
+                    'Portuguese',
+                    'Romanian',
+                    'Santali',
+                    'Shan',
+                    'Spanish',
+                    'Standard Arabic',
+                    'Tumbuka',
+                    'Vietnamese'
+                ]).trigger('change');
+
+                // Function to divide rows of the table
+                function divideDicts(dict1, dict2) {
+                    const result = {};
+                    for (let key in dict1) {
+                        if (key == "Language") {
+                            result[key] = dict1[key];
+                            continue;
+                        }
+
+                        if (!dict1.hasOwnProperty(key) || !dict2.hasOwnProperty(key)) {
+                            continue;
+                        }
+                        const val1 = dict1[key];
+                        const val2 = dict2[key];
+                        if (!isNaN(Number(val1)) && !isNaN(Number(val2)) && Number(val2) !== 0) {
+                            result[key] = (parseFloat(val1) / parseFloat(val2)).toFixed(2);
+                        } else {
+                            result[key] = "–––";
+                        }
+                    }
+                    return result;
+                }
+
+                // Update the table when the base language changes
+                dropdown_base.on('change', function () {
+
+                    // Reset the table data
+                    table = init_table(dataArray);
+
+                    // Find the row matching the selected base language
+                    var matchingRowId = null;
+                    var rowData = null;
+                    table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        rowData = table.row(rowIdx).data();
+                        if (rowData['Language'] === dropdown_base.val()) {
+                            matchingRowId = rowIdx;
+                            return false; // exit the loop early if we find a match
+                        }
+                    });
+                    var divisionRow = table.row(matchingRowId).data();
+
+                    // Loop through each row of the table
+                    table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        if (rowIdx > 0) {
+                            // Get the row data
+                            var rowData = this.data();
+                            this.data(divideDicts(rowData, divisionRow));
+                        };
+                    });
+
+                    table.draw();
+                    dropdown_col.trigger('change');
+                });
+
+                dropdown_base.val("English").trigger('change');
+                dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
+
+
             });
-            rowsData.forEach(function(rowId) {
-                var option = $('<option value="' + rowId + '">' + rowId + '</option>');
-                dropdown_base.append(option);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var colors = ["#bf91ba", "#6ccff6", "#b4dc7f", "#feffa5", "#fcaf58"];
+
+            var language_map = null;
+            $.ajax({
+                dataType: "text",
+                url: "assets/flores_language_map.csv",
+                async: false,
+                success: function(data) {
+                    language_map = data;
+                }
+            }); 
+
+            var dropdown_langL = $('#languageL');
+            language_map.split(/^/m).slice(1).forEach(function(row) {
+                var items = row.split(',');
+                var option = $('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>');
+                dropdown_langL.append(option);
             });
-            tokenizerNames.forEach(function(colId) {
+
+
+
+            console.log(`language_map: ${language_map}`);
+
+            var examples = null;
+            $.ajax({
+                dataType: "json",
+                // url: "assets/examples/shn_Mymr.json", 
+                url: "assets/examples/bul_Cyrl.json", 
+                // url: "assets/examples/eng_Latn.json", 
+                // url: "assets/examples/jpn_Jpan.json",
+                async: false,
+                success: function (json) {
+                    examples = json;
+                }
+            });
+
+            var tokenizerNames = Object.keys(examples).sort();
+
+            var dropdown_tokenizer = $('#example-tokenizer-selector');
+            dropdown_tokenizer.select2();
+            tokenizerNames.forEach(function (colId) {
                 var option = $('<option value="' + colId + '">' + colId + '</option>');
-                dropdown_col.append(option);
+                dropdown_tokenizer.append(option);
             });
 
-            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                var selectedRowIds = dropdown_row.val();
-                var rowId = data[0]; // Assuming the row ID is in the first column
+            var dropdown_sentence = $('#sentence-selector');
+
+            function update_example() {
+
+                var sentence_id = dropdown_sentence.val();
+                var tokenizer = dropdown_tokenizer.val();
+
+                var example = examples[tokenizer][sentence_id];
+
+                var divElement = null;
+
+                divElement = document.getElementById("example1-text");
+                divElement.replaceChildren();
+                var spanElement = document.createElement("span");
+                var spanText = document.createTextNode(example["text"].join(''));
+                spanElement.appendChild(spanText);
+                spanElement.classList.add("text");
+                divElement.appendChild(spanElement);
+
+                divElement = document.getElementById("example1-tokens");
+                divElement.replaceChildren();
+                var nextColorIndex = 0;
+                example["tokens"].flat().forEach(element => {
+                    var spanElement = document.createElement("span");
+                    var spanText = document.createTextNode(element);
+                    spanElement.appendChild(spanText);
+                    spanElement.classList.add("token");
+                    spanElement.style.backgroundColor = colors[nextColorIndex % colors.length];
+                    divElement.appendChild(spanElement);
+                    // add a separator that is an empty span in order to prevent diacritics from combining across tokens
+                    spanElement = document.createElement("span");
+                    spanText = document.createTextNode(" ");
+                    spanElement.appendChild(spanText);
+                    spanElement.classList.add("separator");
+                    divElement.appendChild(spanElement);
+
+                    nextColorIndex += 1;
+                });
+
+                divElement = document.getElementById("example1-token-text");
+                divElement.replaceChildren();
+                nextColorIndex = 0;
+                example["text"].forEach((element, i) => {
+                    var spanElement = document.createElement("span");
+                    var spanText = document.createTextNode(element);
+                    var nTokens = example["tokens"][i].length;
+                    // var nextColorIndex = colorCounter % colors.length;
+                    spanElement.appendChild(spanText);
+                    spanElement.classList.add("token-text");
+
+                    var bgColor = "linear-gradient(to right, ";
+                    for (var i = 0; i < nTokens; i++) {
+                        var colorIndex = nextColorIndex % colors.length;
+                        bgColor += `${colors[colorIndex]} ${100 / nTokens * i}%, ${colors[colorIndex]} ${100 / nTokens * i}%, `;
+                        bgColor += `${colors[colorIndex]} ${100 / nTokens * (i + 1)}%, ${colors[colorIndex]} ${100 / nTokens * (i + 1)}%`;
+                        if (i < nTokens - 1) {
+                            bgColor += ",";
+                        }
+                        nextColorIndex += 1;
+                    }
+                    spanElement.style.backgroundImage = bgColor + ")";
+                    divElement.appendChild(spanElement);
+
+                    // add a separator that is an empty span in order to prevent diacritics from combining across tokens
+                    spanElement = document.createElement("span");
+                    spanText = document.createTextNode(" ");
+                    spanElement.appendChild(spanText);
+                    spanElement.classList.add("separator");
+                    divElement.appendChild(spanElement);
+
+                });
+
+            };
             
-                if (selectedRowIds.includes(rowId)) {
-                    return true;
-                }
-            
-                return false;
-            });
-
-
-
-            // Handle changes to the dropdown and checkboxes
-            dropdown_row.on('change', function() {
-                table.draw();
-            });
-            dropdown_col.on('change', function() {
-                var originalWidth = document.getElementById("myTable").style.width;
-                table.columns().header().each(function(columnHeader, index) {
-                    var caption = $(columnHeader).text();
-                    var columnVisible = dropdown_col.val().indexOf(caption) !== -1;
-                    if (index > 0){
-                        table.column(index).visible(columnVisible);
-                    }
-                });
-                table.draw();
-                table.columns.adjust();
-                document.getElementById("myTable").width = "1%"; 
-                document.getElementById("myTable").style.width = "1%"; 
-            });
-
-            // Select a default subset of the options
-            dropdown_row.val([
-                'Bulgarian',
-                'Burmese',
-                'Chinese (Simplified)',
-                'Dzongkha',
-                'English',
-                'French',
-                'German',
-                'Italian',
-                'Japanese',
-                'Maori',
-                'Pangasinan',
-                'Portuguese',
-                'Romanian',
-                'Santali',
-                'Shan',
-                'Spanish',
-                'Standard Arabic',
-                'Tumbuka',
-                'Vietnamese'
-            ]).trigger('change');
-
-            // Function to divide rows of the table
-            function divideDicts(dict1, dict2) {
-                const result = {};
-                for (let key in dict1) {
-                    if (key == "Language"){
-                        result[key] = dict1[key];
-                        continue;
-                    }
-
-                    if (!dict1.hasOwnProperty(key) || !dict2.hasOwnProperty(key)) {
-                        continue;
-                    }
-                    const val1 = dict1[key];
-                    const val2 = dict2[key];
-                    if (! isNaN(Number(val1)) && ! isNaN(Number(val2)) && Number(val2) !== 0) {
-                        result[key] = (parseFloat(val1) / parseFloat(val2)).toFixed(2);
-                    } else {
-                        result[key] = "–––";
-                    }
-                }
-                return result;
-            }
-
-            // Update the table when the base language changes
-            dropdown_base.on('change', function() {
-
-                // Reset the table data
-                table = init_table(dataArray);
-
-                // Find the row matching the selected base language
-                var matchingRowId = null;
-                var rowData = null;
-                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                    rowData = table.row(rowIdx).data();
-                    if (rowData['Language'] === dropdown_base.val()) {
-                        matchingRowId = rowIdx;
-                        return false; // exit the loop early if we find a match
-                    }
-                });
-                var divisionRow = table.row(matchingRowId).data();
-
-                // Loop through each row of the table
-                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
-                    if (rowIdx > 0){
-                        // Get the row data
-                        var rowData = this.data();
-                        this.data(divideDicts(rowData, divisionRow));
-                    };
-                });
-
-                table.draw();
-                dropdown_col.trigger('change');
-            });
-
-            dropdown_base.val("English").trigger('change');
-            dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
-
+            dropdown_sentence.on('change', update_example);
+            dropdown_tokenizer.on('change', update_example);
+            dropdown_sentence.trigger('change');
 
         });
-    });
-  </script>
-
-  <script type="text/javascript">
-    var colors = ["#bf91ba","#6ccff6","#b4dc7f","#feffa5","#fcaf58"];
-
-    var examples = null;
-    var tokenizer = "ByT5"
-    $.ajax({
-        dataType: "json",
-        // url: "assets/examples/shn_Mymr.json", 
-        // url: "assets/examples/bul_Cyrl.json", 
-        // url: "assets/examples/eng_Latn.json", 
-        url: "assets/examples/jpn_Jpan.json", 
-        async: false,
-        success: function(json) {
-            examples = json[tokenizer];
-        }
-    });
-
-    var example = examples[0];
-
-    console.log(example);
-
-    var divElement = null;
-    
-    divElement = document.getElementById("example1-text");
-    var spanElement = document.createElement("span");
-    var spanText = document.createTextNode(example["text"].join(''));
-    spanElement.appendChild(spanText);
-    spanElement.classList.add("text");
-    divElement.appendChild(spanElement);
-
-    divElement = document.getElementById("example1-tokens");
-    var nextColorIndex = 0;
-    example["tokens"].flat().forEach(element => {
-        var spanElement = document.createElement("span");
-        var spanText = document.createTextNode(element);
-        spanElement.appendChild(spanText);
-        spanElement.classList.add("token");
-        spanElement.style.backgroundColor = colors[nextColorIndex % colors.length];
-        divElement.appendChild(spanElement);
-                // add a separator that is an empty span in order to prevent diacritics from combining across tokens
-                spanElement = document.createElement("span");
-        spanText = document.createTextNode(" ");
-        spanElement.appendChild(spanText);
-        spanElement.classList.add("separator");
-        divElement.appendChild(spanElement);
-
-        nextColorIndex += 1;
-    });
-
-    divElement = document.getElementById("example1-token-text");
-    nextColorIndex = 0;
-    example["text"].forEach((element, i) => {
-        var spanElement = document.createElement("span");
-        var spanText = document.createTextNode(element);
-        var nTokens = example["tokens"][i].length;
-        // var nextColorIndex = colorCounter % colors.length;
-        spanElement.appendChild(spanText);
-        spanElement.classList.add("token-text");
-
-        var bgColor = "linear-gradient(to right, ";
-        console.log(element);
-        for (var i = 0; i < nTokens; i++) {
-            var colorIndex = nextColorIndex % colors.length;
-            console.log(colorIndex);
-            bgColor += `${colors[colorIndex]} ${100/nTokens*i}%, ${colors[colorIndex]} ${100/nTokens*i}%, `;
-            bgColor += `${colors[colorIndex]} ${100/nTokens*(i+1)}%, ${colors[colorIndex]} ${100/nTokens*(i+1)}%`;
-            if (i < nTokens - 1) {
-                bgColor += ",";
-            }
-            nextColorIndex += 1;
-        }
-        spanElement.style.backgroundImage = bgColor+")";
-        divElement.appendChild(spanElement);
-
-        // add a separator that is an empty span in order to prevent diacritics from combining across tokens
-        spanElement = document.createElement("span");
-        spanText = document.createTextNode(" ");
-        spanElement.appendChild(spanText);
-        spanElement.classList.add("separator");
-        divElement.appendChild(spanElement);
-
-    });
-  </script>
+    </script>
 
 
 </body>
+
 </html>
