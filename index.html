@@ -91,12 +91,13 @@
     <style>
         .text {
             font-size: 2em;
+            overflow-wrap: break-word;
         }
 
         .token {
             padding: 0 0.02em;
             margin: 0;
-            font-size: 2em;
+            font-size: 1em;
             position: relative;
         }
 
@@ -131,15 +132,38 @@
         .dataTables_filter {
             display: none;
         }
+
+        .white_glow {
+            text-shadow: 0px 0px 0.1em #fff, 0px 0px 0.1em #fff, 0px 0px 0.1em #fff, 0px 0px 0.1em #fff;
+        }
+
+        /* .heading_bg {
+            background-image: url('assets/bg_small.jpeg'); 
+            background-size: cover;
+        } */
+
+        @media (min-width: 576px) {
+            .make-it-flex {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .flex-item-1 { order: 1; }
+            .flex-item-2 { order: 2; }
+            .flex-item-3 { order: 3; }
+            .flex-item-4 { order: 4; }
+            .flex-item-5 { order: 5; }
+            .flex-item-6 { order: 6; }
+            .flex-item-7 { order: 7; }
+            .flex-item-8 { order: 8; }
+            }
     </style>
 </head>
 
 <body>
 
-    <div class="px-4 py-5 my-5 text-center">
-        <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-        <h1 class="display-5 fw-bold text-body-emphasis">Language Model (or Models?) Tokenizers Introduce Unfairness
-            Between Languages</h1>
+    <div class="px-4 py-5 text-center overflow-hidden heading_bg">
+        <h1 class="display-5 fw-bold text-body-emphasis white_glow">
+            Language Model Tokenizers Introduce Unfairness Between Languages</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4"><b>List of authors</b> </p>
         </div>
@@ -154,78 +178,117 @@
                 most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
                 extensive prebuilt components, and powerful JavaScript plugins.</p>
         </div>
-        <div class="" , style="">
-            <div class="container">
-                <div class="mb-3">
-                    <label for="row-selector" class="form-label">Select your languages:</label>
-                    <select id="row-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="col-selector" class="form-label">Select your models:</label>
-                    <select id="col-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="base-language-selector" class="form-label">Which language should we measure tokenization
-                        lengths against:</label>
-                    <select id="base-language-selector" class="js-example-basic" style="min-width: 200px;">
-                    </select>
-                </div>
-
-
-
-                <table id="myTable" class="display">
-                    <thead>
-                        <tr>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+        <div class="container">
+            <div class="mb-3">
+                <label for="row-selector" class="form-label">Select your languages:</label>
+                <select id="row-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
+                </select>
             </div>
+
+            <div class="mb-3">
+                <label for="col-selector" class="form-label">Select your models:</label>
+                <select id="col-selector" class="js-example-basic-multiple" style="min-width: 50%;" multiple>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="base-language-selector" class="form-label">Which language should we measure tokenization
+                    lengths against:</label>
+                <select id="base-language-selector" class="js-example-basic" style="min-width: 200px;">
+                </select>
+            </div>
+
+
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
+
 
     <div class="b-example-divider"></div>
 
     <table id="language-map-table" style="display:none;"></table>
 
-    <div class="px-4 pt-5 my-5 text-center border-bottom">
-        <h1 class="display-4 fw-bold text-body-emphasis">Compare tokenization of sentences</h1>
+    <div class="px-4 pt-5 my-5 border-bottom">
+        <h1 class="col-lg-6 mx-auto fw-bold text-body-emphasis">Compare tokenization of sentences</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s
                 most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
                 extensive prebuilt components, and powerful JavaScript plugins.</p>
         </div>
 
-        <label for="example-tokenizer-selector" class="form-label">Pick tokenizer:</label>
-        <select id="example-tokenizer-selector" class="js-example-basic" style="min-width: 200px;">
-        </select>
+        <div class="col-lg-6 mx-auto  mb-5">
+            <div class="row justify-content-center mb-2">
+                <div class="col-xs-12 col-sm-6">
+                    <label for="example-tokenizer-selector" class="form-label">Pick tokenizer:</label>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <select id="example-tokenizer-selector" class="js-example-basic dropdown-menu">
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <label for="sentence-selector" class="form-label">Scroll for other example sentences:</label>
+                </div>
+                <div class="col-10">
+                    <input type="range" class="form-range" min="0" max="9" id="sentence-selector" value=5>
+                </div>
+            </div>
+        </div>
 
-        <label for="sentence-selector" class="form-label">Scroll for other example sentences</label>
-        <input type="range" class="form-range" min="0" max="9" id="sentence-selector" value=5>
-
-        <div id="example1" class="example">
-
-            <div class="form-floating">
-            <select class="form-select" id="languageL" aria-label="Select language">
-            </select>
-            <label for="languageL">Select language:</label>
+        <div class="row make-it-flex">
+            <div class="col-xs-12 col-sm-6 flex-item-1 mb-3">
+                <div class="form-floating example">
+                    <select class="form-select" id="languageL" aria-label="Select language"></select>
+                    <label for="languageL">Select language:</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-3 mb-2">
+                <small class="text-muted">Sentence:</small>
+                <div id="exampleL-text" class="text-container"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-5 mb-2">
+                <small class="text-muted" id="exampleL-ntokens">X Tokens, Y% Unknown:</small>
+                <div id="exampleL-token-text" class="tokens-token-text"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-7 mb-5">
+                <small class="text-muted">Token IDs:</small>
+                <div id="exampleL-tokens" class="tokens-container"></div>
+                <div class="ml-auto col-auto"></div>
             </div>
 
-            <div id="example1-text" class="text-container"></div>
-            <br>
-            <div id="example1-token-text" class="tokens-token-text"></div>
-            <br>
-            <div id="example1-tokens" class="tokens-container"></div>
+            <div class="col-xs-12 col-sm-6 flex-item-2 mb-3">
+                <div class="form-floating example">
+                    <select class="form-select" id="languageR" aria-label="Select language"></select>
+                    <label for="languageR">Select language:</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-4 mb-2">
+                <small class="text-muted">Sentence:</small>
+                <div id="exampleR-text" class="text-container"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-6 mb-2">
+                <small class="text-muted" id="exampleR-ntokens">X Tokens, Y% Unknown:</small>
+                <div id="exampleR-token-text" class="tokens-token-text"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 flex-item-8 mb-2">
+                <small class="text-muted">Token IDs:</small>
+                <div id="exampleR-tokens" class="tokens-container"></div>
+            </div>    
         </div>
+
+        
     </div>
 
-
+    <div class="b-example-divider"></div>
 
 
 
@@ -434,7 +497,23 @@
     </script>
 
     <script type="text/javascript">
+
         $(document).ready(function () {
+
+            get_examples = function (lang) {
+                var examples = null;
+                $.ajax({
+                    dataType: "json",
+                    url: `assets/examples/${lang}.json`,
+                    async: false,
+                    success: function (json) {
+                        examples = json;
+                    }
+                });
+
+                return examples;
+            };
+
             var colors = ["#bf91ba", "#6ccff6", "#b4dc7f", "#feffa5", "#fcaf58"];
 
             var language_map = null;
@@ -448,30 +527,14 @@
             }); 
 
             var dropdown_langL = $('#languageL');
+            var dropdown_langR = $('#languageR');
             language_map.split(/^/m).slice(1).forEach(function(row) {
                 var items = row.split(',');
-                var option = $('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>');
-                dropdown_langL.append(option);
+                dropdown_langL.append($('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>'));
+                dropdown_langR.append($('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>'));
             });
 
-
-
-            console.log(`language_map: ${language_map}`);
-
-            var examples = null;
-            $.ajax({
-                dataType: "json",
-                // url: "assets/examples/shn_Mymr.json", 
-                url: "assets/examples/bul_Cyrl.json", 
-                // url: "assets/examples/eng_Latn.json", 
-                // url: "assets/examples/jpn_Jpan.json",
-                async: false,
-                success: function (json) {
-                    examples = json;
-                }
-            });
-
-            var tokenizerNames = Object.keys(examples).sort();
+            var tokenizerNames = Object.keys(get_examples("eng_Latn")).sort();
 
             var dropdown_tokenizer = $('#example-tokenizer-selector');
             dropdown_tokenizer.select2();
@@ -482,24 +545,30 @@
 
             var dropdown_sentence = $('#sentence-selector');
 
-            function update_example() {
+            function update_example(which) {
 
+                var language = $(`#language${which}`).val();
                 var sentence_id = dropdown_sentence.val();
                 var tokenizer = dropdown_tokenizer.val();
 
-                var example = examples[tokenizer][sentence_id];
+                console.log(language, sentence_id, tokenizer);
+
+                var example = get_examples(language)[tokenizer][sentence_id];
 
                 var divElement = null;
 
-                divElement = document.getElementById("example1-text");
+                divElement = document.getElementById(`example${which}-text`);
                 divElement.replaceChildren();
                 var spanElement = document.createElement("span");
-                var spanText = document.createTextNode(example["text"].join(''));
+                var spanText = document.createTextNode(example["text"]);
                 spanElement.appendChild(spanText);
                 spanElement.classList.add("text");
                 divElement.appendChild(spanElement);
 
-                divElement = document.getElementById("example1-tokens");
+                divElement = document.getElementById(`example${which}-ntokens`);
+                divElement.innerHTML = `${example["num_tokens"]} tokens, ${(100*example["unknown_fraction"]).toFixed(0)}% characters mapped to the UNK token:`;
+
+                divElement = document.getElementById(`example${which}-tokens`);
                 divElement.replaceChildren();
                 var nextColorIndex = 0;
                 example["tokens"].flat().forEach(element => {
@@ -519,10 +588,10 @@
                     nextColorIndex += 1;
                 });
 
-                divElement = document.getElementById("example1-token-text");
+                divElement = document.getElementById(`example${which}-token-text`);
                 divElement.replaceChildren();
                 nextColorIndex = 0;
-                example["text"].forEach((element, i) => {
+                example["tokens-text"].forEach((element, i) => {
                     var spanElement = document.createElement("span");
                     var spanText = document.createTextNode(element);
                     var nTokens = example["tokens"][i].length;
@@ -539,7 +608,7 @@
                             bgColor += ",";
                         }
                         nextColorIndex += 1;
-                    }
+                    };
                     spanElement.style.backgroundImage = bgColor + ")";
                     divElement.appendChild(spanElement);
 
@@ -554,8 +623,15 @@
 
             };
             
-            dropdown_sentence.on('change', update_example);
-            dropdown_tokenizer.on('change', update_example);
+            dropdown_langL.val("shn_Mymr");
+            dropdown_langR.val("eng_Latn");
+            dropdown_tokenizer.val("GPT-2");
+
+            dropdown_sentence.on('change', function () {update_example("L"); update_example("R");});
+            dropdown_tokenizer.on('change', function () {update_example("L"); update_example("R");});
+            dropdown_langL.on('change', function () {update_example("L");});
+            dropdown_langR.on('change', function () {update_example("R");});
+
             dropdown_sentence.trigger('change');
 
         });

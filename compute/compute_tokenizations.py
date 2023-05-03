@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 import multiprocessing
+from typing import Type
 import pandas
 import os
 from collections import defaultdict
 
-from tokenizer_interface import ALL_TOKENIZERS
+from tokenizer_interface import ALL_TOKENIZERS, TokenizerInterface
 
 os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 
@@ -49,7 +50,16 @@ def process_one_language(lang, reverse=False):
         # process the examples:
         for ex in examples:
             processed_tokens, processed_strs = tk.align_tokens_to_text(tk.encode(ex), reverse=reverse)
-            examples_tokenized[tk.pretty_name].append({"text": processed_strs, "tokens": processed_tokens})
+            total_num_tokens = sum([len(t) for t in processed_tokens])
+            unknown_count = tk.count_unknown(ex)
+            examples_tokenized[tk.pretty_name].append({
+                "text": ex, 
+                "tokens-text": processed_strs, 
+                "tokens": processed_tokens,
+                "num_tokens": total_num_tokens,
+                "unknown_fraction": unknown_count / total_num_tokens,
+                })
+            
 
     # save the examples:
     os.makedirs("assets/examples", exist_ok=True)
