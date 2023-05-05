@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Interactive DataTable</title>
+    <title>Tokenizer unfairness</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css"
@@ -86,9 +86,7 @@
         .bd-mode-toggle {
             z-index: 1500;
         }
-    </style>
 
-    <style>
         .text {
             font-size: 2em;
             overflow-wrap: break-word;
@@ -160,16 +158,64 @@
             .flex-item-7 { order: 7; }
             .flex-item-8 { order: 8; }
             }
+
+        .author-block {
+            display: inline-block;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="px-4 py-5 text-center overflow-hidden heading_bg">
-        <h1 class="display-5 fw-bold text-body-emphasis white_glow">
+    <div class="px-4 py-5 overflow-hidden heading_bg text-center">
+        <h1 class="col-lg-6 mx-auto mb-4 display-5 fw-bold text-body-emphasis white_glow">
             Language Model Tokenizers Introduce Unfairness Between Languages</h1>
         <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4"><b>List of authors</b> </p>
+            <p class="lead mb-4"><b>
+                <span class="author-block"><a href="https://p-petrov.com/">Aleksandar Petrov</a><sup>1,2</sup>,</span> 
+                <span class="author-block"><a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a><sup>1</sup>,</span>
+                <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a><sup>2</sup>,</span> 
+                <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a><sup>2</sup></span> </p>
+            </div>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4 text-muted">
+                <span class="author-block"><sup>1</sup>Department of Computer Science, University of Oxford</span> 
+                <span class="author-block"><sup>2</sup>Department of Engineering Science, University of Oxford</span> 
+            </b>
+        </div> 
+    </div>
+
+    <div class="b-example-divider"></div>
+
+    <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Modern language models can speak many languages...</h1>
+            <p class="lead">
+                It is impressive that language models can understand many different languages, even some lower-resource ones, especially considering that most of them were built targeting solely English text.
+                However, unsurprisingly, their performance varies greatly across languages: models show much better command in their target language.
+            </p>
+            </div>
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                <img class="rounded-lg-3" src="assets/chat_example.jpeg" alt="Example text in different languages" width="720">
+            </div>
+        </div>
+    </div>
+
+    <div class="b-example-divider"></div>
+
+    <div class="container my-5">
+        <div class="row pl-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+            <div class="col-lg-4 p-0 overflow-hidden">
+                <img class="rounded-lg-3" src="assets/tokenization_diff.jpg" alt="Example text in different languages" width="720">
+            </div>
+            <div class="col-lg-7 offset-lg-1 p-3 p-lg-5 pt-lg-3">
+                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">But they are treated drastically different already at the tokenization stage</h1>
+                <p class="lead">
+                    The tokenization lengths for some lanugages can be more than 15 times longer than English.
+                    This results in unfair treatment for some language communities in regards to the cost of accessing API-based language services (which often charge per token), the processing time and latency, as well as the amount of content that can be provided as context to the models. 
+                </p>
+                </div>
         </div>
     </div>
 
