@@ -149,19 +149,65 @@
                 display: flex;
                 flex-wrap: wrap;
             }
-            .flex-item-1 { order: 1; }
-            .flex-item-2 { order: 2; }
-            .flex-item-3 { order: 3; }
-            .flex-item-4 { order: 4; }
-            .flex-item-5 { order: 5; }
-            .flex-item-6 { order: 6; }
-            .flex-item-7 { order: 7; }
-            .flex-item-8 { order: 8; }
+
+            .flex-item-1 {
+                order: 1;
             }
+
+            .flex-item-2 {
+                order: 2;
+            }
+
+            .flex-item-3 {
+                order: 3;
+            }
+
+            .flex-item-4 {
+                order: 4;
+            }
+
+            .flex-item-5 {
+                order: 5;
+            }
+
+            .flex-item-6 {
+                order: 6;
+            }
+
+            .flex-item-7 {
+                order: 7;
+            }
+
+            .flex-item-8 {
+                order: 8;
+            }
+        }
 
         .author-block {
             display: inline-block;
         }
+
+        .dt-left {
+            text-align: left;
+        }
+
+        .dt-right {
+            text-align: right;
+        }
+
+        .arxiv-link {
+            /* display: flex; */
+            align-items: center;
+        }
+
+        .arxiv-logo {
+            height: 2em;
+            /* Adjust the logo size as needed */
+            margin-left: 10px;
+            /* Add some space between the logo and the text */
+            align-items: center;
+        }
+    </style>
     </style>
 </head>
 
@@ -172,17 +218,24 @@
             Language Model Tokenizers Introduce Unfairness Between Languages</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4"><b>
-                <span class="author-block"><a href="https://p-petrov.com/">Aleksandar Petrov</a><sup>1,2</sup>,</span> 
-                <span class="author-block"><a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a><sup>1</sup>,</span>
-                <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a><sup>2</sup>,</span> 
-                <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a><sup>2</sup></span> </p>
-            </div>
+                    <span class="author-block">
+                        <a href="https://p-petrov.com/">Aleksandar Petrov</a>
+                        <sup>1,2</sup>,
+                    </span>
+                    <span class="author-block">
+                        <a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a>
+                        <sup>1</sup>,
+                    </span>
+                    <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a><sup>2</sup>,</span>
+                    <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a><sup>2</sup></span>
+            </p>
+        </div>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4 text-muted">
-                <span class="author-block"><sup>1</sup>Department of Computer Science, University of Oxford</span> 
-                <span class="author-block"><sup>2</sup>Department of Engineering Science, University of Oxford</span> 
-            </b>
-        </div> 
+                <span class="author-block"><sup>1</sup>Department of Computer Science, University of Oxford</span>
+                <span class="author-block"><sup>2</sup>Department of Engineering Science, University of Oxford</span>
+                </b>
+        </div>
     </div>
 
     <div class="b-example-divider"></div>
@@ -190,14 +243,19 @@
     <div class="container my-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-            <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Modern language models can speak many languages...</h1>
-            <p class="lead">
-                It is impressive that language models can understand many different languages, even some lower-resource ones, especially considering that most of them were built targeting solely English text.
-                However, unsurprisingly, their performance varies greatly across languages: models show much better command in their target language.
-            </p>
+                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Modern language models can speak many languages...
+                </h1>
+                <p class="lead">
+                    It is impressive that language models can understand many different languages, even some
+                    lower-resource ones, especially considering that most of them were built targeting solely English
+                    text.
+                    However, unsurprisingly, their performance varies greatly across languages: models show much better
+                    command in their target language.
+                </p>
             </div>
             <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-                <img class="rounded-lg-3" src="assets/chat_example.jpeg" alt="Example text in different languages" width="720">
+                <img class="rounded-lg-3" src="assets/chat_example.jpeg" alt="Example text in different languages"
+                    width="720">
             </div>
         </div>
     </div>
@@ -207,26 +265,33 @@
     <div class="container my-5">
         <div class="row pl-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
             <div class="col-lg-4 p-0 overflow-hidden">
-                <img class="rounded-lg-3" src="assets/tokenization_diff.jpg" alt="Example text in different languages" width="720">
+                <img class="rounded-lg-3" src="assets/tokenization_diff.jpg" alt="Example text in different languages"
+                    width="720">
             </div>
             <div class="col-lg-7 offset-lg-1 p-3 p-lg-5 pt-lg-3">
-                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">But they are treated drastically different already at the tokenization stage</h1>
+                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">But they are treated drastically differently
+                    already at the tokenization stage</h1>
                 <p class="lead">
                     The tokenization lengths for some lanugages can be more than 15 times longer than English.
-                    This results in unfair treatment for some language communities in regards to the cost of accessing API-based language services (which often charge per token), the processing time and latency, as well as the amount of content that can be provided as context to the models. 
+                    This results in some language communities having much larger cost of accessing API-based services
+                    (which often charge per token), processing times and latency, and smaller amount of content that can
+                    be provided as context.
                 </p>
-                </div>
+            </div>
         </div>
     </div>
 
     <div class="b-example-divider"></div>
 
     <div class="px-4 pt-5 my-5">
-        <h1 class="col-lg-6 mx-auto fw-bold text-body-emphasis">Check your own languages</h1>
+        <h1 class="col-lg-6 mx-auto fw-bold text-body-emphasis">See for yourself</h1>
         <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s
-                most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
-                extensive prebuilt components, and powerful JavaScript plugins.</p>
+            <p class="lead mb-4">
+                Select the languages and models you want to compare and see how they differ in tokenization length.
+                The tokenization length is computed over 2000 sentences from the <a
+                    href="https://github.com/facebookresearch/flores">FLORES-200</a> parallel corpus.
+                You can also change which language is used to normalize the tokenization lengths.
+            </p>
         </div>
         <div class="col-lg-6 mx-auto mb-5">
             <div class="row mb-3">
@@ -234,19 +299,20 @@
                 <div class="col-sm-8">
                     <select id="row-selector" class="js-example-basic-multiple" style="width: 100%" multiple>
                     </select>
-            </div>
+                </div>
             </div>
 
             <div class="row mb-3 ">
                 <label for="col-selector" class="form-label col-sm-4 col-form-label">Select your models:</label>
                 <div class="col-sm-8">
-                <select id="col-selector" class="js-example-basic-multiple" style="width: 100%;" multiple>
-                </select>
+                    <select id="col-selector" class="js-example-basic-multiple" style="width: 100%;" multiple>
+                    </select>
                 </div>
             </div>
 
             <div class="row mb-5 align-items-center">
-                <label for="base-language-selector" class="form-label col-sm-8 col-form-label">Language to measure tokenization lengths against:</label>
+                <label for="base-language-selector" class="form-label col-sm-8 col-form-label">Language to measure
+                    tokenization lengths against:</label>
                 <div class="col-sm-4">
                     <select id="base-language-selector" class="js-example-basic" style="width: 100%;">
                     </select>
@@ -266,18 +332,27 @@
             </table>
         </div>
 
+        <div class="col-lg-6 mx-auto mb-5">
+            <div class="row text-end">
+                <p class="text-muted ">
+                    Missing a tokenizer? Add it with a pull request <a
+                        href="https://github.com/AleksandarPetrov/tokenization-fairness">here</a>.
+                </p>
+            </div>
         </div>
-    </div>
 
+    </div>
 
     <div class="b-example-divider"></div>
 
     <div class="px-4 pt-5 my-5">
         <h1 class="col-lg-6 mx-auto fw-bold text-body-emphasis">Compare tokenization of sentences</h1>
         <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s
-                most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system,
-                extensive prebuilt components, and powerful JavaScript plugins.</p>
+            <p class="lead mb-4">
+                You can compare the tokenization of the same sentences across languages and tokenizers.
+                The sentences are selected from the <a href="https://github.com/facebookresearch/flores">FLORES-200</a>
+                parallel corpus.
+            </p>
         </div>
 
         <div class="col-lg-6 mx-auto  mb-5">
@@ -303,7 +378,7 @@
         <div class="row make-it-flex">
             <div class="col-xs-12 col-sm-6 flex-item-1 mb-3">
                 <div class="form-floating example">
-                    <select class="form-select" id="languageL" aria-label="Select language"></select>
+                    <select class="form-select selectpicker" id="languageL" aria-label="Select language" data-live-search="true"></select>
                     <label for="languageL">Select language:</label>
                 </div>
             </div>
@@ -338,16 +413,81 @@
             <div class="col-xs-12 col-sm-6 flex-item-8 mb-2">
                 <small class="text-muted">Token IDs:</small>
                 <div id="exampleR-tokens" class="tokens-container"></div>
-            </div>    
+            </div>
         </div>
 
-        
+
     </div>
 
     <div class="b-example-divider"></div>
 
 
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                For more details, read our paper:
+            </h1>
+        </div>
+        <div class="row g-5 py-5">
+            <div class="col-lg-6">
+                <h3 class="display-8 fw-bold text-body-emphasis lh-1 mb-3">
+                    Language Model Tokenizers Introduce Unfairness Between Languages
+                </h3>
+                <h5 class="display-8 lh-1 mb-3 text-muted">
+                    <span class="author-block">
+                        <a href="https://p-petrov.com/">Aleksandar Petrov</a>,
+                    </span>
+                    <span class="author-block">
+                        <a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a>,
+                    </span>
+                    <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a>,</span>
+                    <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a></span>
+                </h5>
+                <p><em>Recent language models have shown impressive multilingual performance, even when not explicitly
+                        trained for it. Despite this, concerns have been raised about the quality of their output across
+                        different languages. In this paper, we show how disparity in the treatment of different
+                        languages arises at the tokenization stage, well before a model is even invoked. The same text
+                        translated to different languages can have drastically different tokenization lengths: up to 15
+                        times in some cases. These disparities persist across the N tokenizers we evaluate, even if they
+                        are intentionally trained for multilingual support. Models working directly on the character- or
+                        byte-level also exhibit over 4 times difference in the encoding length for some language pairs.
+                        This induces unfair treatment for some language communities in regards to the cost of accessing
+                        commercial language services, the processing time and latency, as well as the amount of content
+                        that can be provided as context to the models. Therefore, we make that case that we should train
+                        future language models using multilingually fair tokenizers.</em></p>
+            </div>
+            <div class="col-lg-6 center-block ">
 
+                <div class="container">
+                    <div class="row align-items-center">
+                        <button onclick="window.open('https://arxiv.org/your-paper-link', '_blank')"
+                            class="btn btn-danger">
+                            <h3>Read on
+                                <img src="assets/arxiv-logo-one-color-white.svg" alt="arXiv Logo" class="arxiv-logo">
+                            </h3>
+                        </button>
+                    </div>
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Cite as:</h5>
+                            <pre>@article{XXX2022XXX,
+title = {Paper_title},
+author = {
+    Petrov, Aleksandar and 
+    La Malfa, Emanuele and 
+    Bibi, Adel and 
+    H. S. Torr, Philip
+},
+journal = {arXiv preprint: arXiv:XXX.XXX},
+url={https://arxiv.org/abs/XXX.XXX},
+year = {2022}
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -363,15 +503,23 @@
             // Load the data from the CSV file
             $.get("assets/tokenization_lengths_validated.csv", async = false, function (data) {
                 // Parse the CSV data into an array of objects
-                var dataArray = Papa.parse(data, { header: true, skipEmptyLines: true }).data;
+                var dataArray = Papa.parse(data, {
+                    header: true,
+                    skipEmptyLines: true
+                }).data;
 
                 // Get the column names from the first row of data
                 var columnNames = Object.keys(dataArray[0]);
                 var tokenizerNames = columnNames.slice(1).sort();
 
                 // Generate the DataTable columns based on the column names
-                var tableColumns = columnNames.map(function (columnName) {
-                    return { data: columnName, title: columnName };
+                var tableColumns = columnNames.map(function (columnName, index) {
+                    if (index > 0) {
+                        var align = "dt-right";
+                    } else {
+                        var align = "dt-left";
+                    }
+                    return { data: columnName, title: columnName, className: align };
                 });
 
                 // Update the number of columns in the table
@@ -392,9 +540,6 @@
                 function init_table(dataArray) {
                     return $('#myTable').DataTable({
                         data: dataArray,
-                        render: function (data, type, row) {
-                            return isNaN(Number(data)) ? '—' : data;
-                        },
                         columns: tableColumns,
                         paging: false,
                         searching: true,
@@ -507,7 +652,7 @@
                         if (!isNaN(Number(val1)) && !isNaN(Number(val2)) && Number(val2) !== 0) {
                             result[key] = (parseFloat(val1) / parseFloat(val2)).toFixed(2);
                         } else {
-                            result[key] = "–––";
+                            result[key] = "&mdash;";
                         }
                     }
                     return result;
@@ -576,14 +721,14 @@
                 dataType: "text",
                 url: "assets/flores_language_map.csv",
                 async: false,
-                success: function(data) {
+                success: function (data) {
                     language_map = data;
                 }
-            }); 
+            });
 
             var dropdown_langL = $('#languageL');
             var dropdown_langR = $('#languageR');
-            language_map.split(/^/m).slice(1).forEach(function(row) {
+            language_map.split(/^/m).slice(1).forEach(function (row) {
                 var items = row.split(',');
                 dropdown_langL.append($('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>'));
                 dropdown_langR.append($('<option value="' + items[1].trim() + '">' + items[0].trim() + '</option>'));
@@ -621,7 +766,7 @@
                 divElement.appendChild(spanElement);
 
                 divElement = document.getElementById(`example${which}-ntokens`);
-                divElement.innerHTML = `${example["num_tokens"]} tokens, ${(100*example["unknown_fraction"]).toFixed(0)}% characters mapped to the UNK token:`;
+                divElement.innerHTML = `${example["num_tokens"]} tokens, ${(100 * example["unknown_fraction"]).toFixed(0)}% characters mapped to the UNK token:`;
 
                 divElement = document.getElementById(`example${which}-tokens`);
                 divElement.replaceChildren();
@@ -677,15 +822,15 @@
                 });
 
             };
-            
+
             dropdown_langL.val("shn_Mymr");
             dropdown_langR.val("eng_Latn");
             dropdown_tokenizer.val("cl100k_base");
 
-            dropdown_sentence.on('change', function () {update_example("L"); update_example("R");});
-            dropdown_tokenizer.on('change', function () {update_example("L"); update_example("R");});
-            dropdown_langL.on('change', function () {update_example("L");});
-            dropdown_langR.on('change', function () {update_example("R");});
+            dropdown_sentence.on('change', function () { update_example("L"); update_example("R"); });
+            dropdown_tokenizer.on('change', function () { update_example("L"); update_example("R"); });
+            dropdown_langL.on('change', function () { update_example("L"); });
+            dropdown_langR.on('change', function () { update_example("R"); });
 
             dropdown_sentence.trigger('change');
 
