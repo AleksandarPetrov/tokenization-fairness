@@ -207,24 +207,29 @@
             /* Add some space between the logo and the text */
             align-items: center;
         }
-    </style>
+
+        .no-right-margin {
+            margin-right: 0px;
+        }
+
+        .no-left-margin {
+            margin-left: 0px;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="px-4 py-5 overflow-hidden heading_bg text-center">
-        <h1 class="col-lg-6 mx-auto mb-4 display-5 fw-bold text-body-emphasis white_glow">
+        <h1 class="col-lg-8 mx-auto mb-4 display-5 fw-bold text-body-emphasis white_glow">
             Language Model Tokenizers Introduce Unfairness Between Languages</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4"><b>
                     <span class="author-block">
-                        <a href="https://p-petrov.com/">Aleksandar Petrov</a>
-                        <sup>1,2</sup>,
+                        <a href="https://p-petrov.com/">Aleksandar Petrov</a><sup>1,2</sup>,
                     </span>
                     <span class="author-block">
-                        <a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a>
-                        <sup>1</sup>,
+                        <a href="https://www.cs.ox.ac.uk/people/emanuele.lamalfa/">Emanuele La Malfa</a><sup>1</sup>,
                     </span>
                     <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a><sup>2</sup></span>
                     <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a><sup>2</sup>,</span>
@@ -232,16 +237,17 @@
         </div>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4 text-muted">
-                <span class="author-block"><sup>1</sup>Department of Computer Science, University of Oxford</span>
-                <span class="author-block"><sup>2</sup>Department of Engineering Science, University of Oxford</span>
+                <span class="author-block"><sup>1</sup>Department of Computer Science,</span> <span class="author-block">University of Oxford</span>
+                <span class="author-block"><sup>2</sup>Department of Engineering Science,</span> <span class="author-block">University of Oxford</span>
                 </b>
         </div>
     </div>
 
     <div class="b-example-divider"></div>
 
-    <div class="container my-5">
-        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+    <div class="container no-right-margin">
+        <!-- <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg"> -->
+        <div class="row align-items-center">
             <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
                 <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Modern language models can speak many languages...
                 </h1>
@@ -253,7 +259,7 @@
                     command in their target language.
                 </p>
             </div>
-            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden">
                 <img class="rounded-lg-3" src="assets/chat_example.jpeg" alt="Example text in different languages"
                     width="720">
             </div>
@@ -262,8 +268,9 @@
 
     <div class="b-example-divider"></div>
 
-    <div class="container my-5">
-        <div class="row pl-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+    <div class="container no-left-margin">
+        <!-- <div class="row pl-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg"> -->
+        <div class="row align-items-center ">
             <div class="col-lg-4 p-0 overflow-hidden">
                 <img class="rounded-lg-3" src="assets/tokenization_diff.jpg" alt="Example text in different languages"
                     width="720">
@@ -690,7 +697,19 @@ year = {2022}
                 });
 
                 dropdown_base.val("English").trigger('change');
-                dropdown_col.val(["GPT-2", "cl100k_base", "RoBERTa", "XLM-RoBERTa", "M2M100", "MBart50", "mT5", "FlanT5", "ByT5", "CANINE", "BLOOM"]).trigger("change");
+                dropdown_col.val([
+                    "GPT-2", 
+                    "cl100k_base", 
+                    "RoBERTa", 
+                    "XLM-RoBERTa", 
+                    // "M2M100", 
+                    // "MBart50", 
+                    // "mT5", 
+                    // "FlanT5", 
+                    "ByT5", 
+                    // "CANINE", 
+                    "BLOOM"
+                ]).trigger("change");
 
 
             });
