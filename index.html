@@ -337,6 +337,14 @@
             </div>
         </div>
 
+        <div class="col-lg-6 mx-auto">
+            <div class="row text-end">
+                <p class="text-muted ">
+                    *For the tokenization premiums for ChatGPT and GPT-4 refer to the <b>cl100k_base</b> tokenizer.
+                </p>
+            </div>
+        </div>
+
         <div class="row">
             <table id="myTable" class="display">
                 <thead>
@@ -460,18 +468,16 @@
                     <span class="author-block"><a href="https://torrvision.com/">Philip H.S. Torr</a></span>
                     <span class="author-block"><a href="https://www.adelbibi.com/">Adel Bibi</a>,</span>
                 </h5>
-                <p><em>Recent language models have shown impressive multilingual performance, even when not explicitly
-                        trained for it. Despite this, concerns have been raised about the quality of their output across
-                        different languages. In this paper, we show how disparity in the treatment of different
-                        languages arises at the tokenization stage, well before a model is even invoked. The same text
-                        translated to different languages can have drastically different tokenization lengths: up to 15
-                        times in some cases. These disparities persist across the N tokenizers we evaluate, even if they
-                        are intentionally trained for multilingual support. Models working directly on the character- or
-                        byte-level also exhibit over 4 times difference in the encoding length for some language pairs.
-                        This induces unfair treatment for some language communities in regards to the cost of accessing
-                        commercial language services, the processing time and latency, as well as the amount of content
-                        that can be provided as context to the models. Therefore, we make that case that we should train
-                        future language models using multilingually fair tokenizers.</em></p>
+                <p><em>
+                    Recent language models have shown impressive multilingual performance, even when not explicitly trained for it.
+                    Despite this, concerns have been raised about the quality of their outputs across different languages.
+                    In this paper, we show how disparity in the treatment of different languages arises at the tokenization stage, well before a model is even invoked.
+                    The same text translated into different languages can have drastically different tokenization lengths, with differences up to 15 times in some cases.
+                    These disparities persist across the 17 tokenizers we evaluate, even if they are intentionally trained for multilingual support.
+                    Character-level and byte-level models also exhibit over 4 times the difference in the encoding length for some language pairs.
+                    This induces unfair treatment for some language communities in regard to the cost of accessing commercial language services, the processing time and latency, as well as the amount of content that can be provided as context to the models.
+                    Therefore, we make the case that we should train future language models using multilingually fair tokenizers. 
+                </em></p>
             </div>
             <div class="col-lg-6 center-block ">
 
@@ -488,7 +494,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Cite as:</h5>
                             <pre>@article{XXX2022XXX,
-title = {Paper_title},
+title = {Language Model Tokenizers Introduce Unfairness Between Languages},
 author = {
     Petrov, Aleksandar and 
     La Malfa, Emanuele and 
@@ -497,7 +503,7 @@ author = {
 },
 journal = {arXiv preprint: arXiv:XXX.XXX},
 url={https://arxiv.org/abs/XXX.XXX},
-year = {2022}
+year = {2023}
 }</pre>
                         </div>
                     </div>
