@@ -7,7 +7,7 @@ from typing import List, Union
 from itertools import cycle
 
 import tiktoken
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, LlamaTokenizer
 
 # abstract class for tokenizers inheriting from ABC
 class TokenizerInterface(ABC):
@@ -223,11 +223,12 @@ class HuggingFaceTokenizer(TokenizerInterface):
     tokenizer = None
     tokenizer_name = "NotValid"
     NOT_COMPLETE_SYMBOL_ORD = 65533
+    init_kwargs = {}
 
     def __init__(self):
         if self.tokenizer is None:
             raise NotImplementedError("HuggingFaceTokenizer must be subclassed!")
-        self.encoder = AutoTokenizer.from_pretrained(self.tokenizer)
+        self.encoder = AutoTokenizer.from_pretrained(self.tokenizer, **self.init_kwargs)
 
     def encode(self, text: str) -> List[int]:
         return self.encoder.convert_tokens_to_ids(self.encoder.tokenize(text))
@@ -311,7 +312,19 @@ class BERTJapanese(HuggingFaceTokenizer):
     tokenizer = "cl-tohoku/bert-base-japanese"
     tokenizer_name = "BERT Japanese"
 
+class Qwen(HuggingFaceTokenizer):
+    tokenizer = "Qwen/Qwen-7B-Chat"
+    tokenizer_name = "Qwen"
+    init_kwargs = {"trust_remote_code": True}
+
+class LLAMA(HuggingFaceTokenizer):
+    tokenizer = "meta-llama/Llama-2-7b-chat-hf"
+    tokenizer_name = "LLAMA"
+
+
 ALL_TOKENIZERS = [
+    Qwen,
+    LLAMA,
     OpenAI_GPT2,
     OpenAI_r50k_base,
     OpenAI_p50k_base,
