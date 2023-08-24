@@ -1,0 +1,11 @@
+pandas
+numpy
+tiktoken
+transformers>=4.31.0
+fugashi
+ipadic
+sentencepiece
+protobuf
+seaborn
+tqdm
+seamless_communication @ git+https://github.com/facebookresearch/seamless_communication@main

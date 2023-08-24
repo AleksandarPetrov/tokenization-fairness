@@ -9,6 +9,9 @@ from itertools import cycle
 import tiktoken
 from transformers import AutoTokenizer, LlamaTokenizer
 
+import torch
+from seamless_communication.models.unity import load_unity_text_tokenizer
+
 # abstract class for tokenizers inheriting from ABC
 class TokenizerInterface(ABC):
 
@@ -152,7 +155,7 @@ class TokenizerInterface(ABC):
         return prefix + codes + words + suffix
 
     @abstractmethod
-    def count_unknown(self, tokens: List[int]) -> bool:
+    def count_unknown(self, text: str) -> int:
         raise NotImplementedError
 
 class UTF32_Tokenizer(TokenizerInterface):
@@ -170,7 +173,7 @@ class UTF32_Tokenizer(TokenizerInterface):
     def pretty_name(self) -> str:
         return "UTF-32"
     
-    def count_unknown(self, tokens: List[int]) -> bool:
+    def count_unknown(self, test: str) -> int:
         return 0
 
 class OpenAITokenizer(TokenizerInterface):
@@ -195,7 +198,7 @@ class OpenAITokenizer(TokenizerInterface):
     def pretty_name(self) -> str:
         return self.tokenizer_name
     
-    def count_unknown(self, tokens: List[int]) -> bool:
+    def count_unknown(self, test: str) -> int:
         return 0
 
 class OpenAI_GPT2(OpenAITokenizer):
@@ -321,8 +324,37 @@ class LLAMA(HuggingFaceTokenizer):
     tokenizer = "meta-llama/Llama-2-7b-chat-hf"
     tokenizer_name = "LLAMA"
 
+class FacebookAI_SeamlessM4T(TokenizerInterface):
+
+    pretty_name = "SeamlessM4T"
+
+    def __init__(self) -> None:
+        super().__init__()
+        
+        tokenizer = load_unity_text_tokenizer("seamlessM4T_medium")
+        self.tokenizer = tokenizer.create_encoder()
+        self.detokenizer = tokenizer.create_decoder()
+
+    def encode(self, text: str) -> List[int]:
+        return self.tokenizer(text).tolist()
+    
+    def decode(self, text: List[int]) -> str:
+        return str(self.detokenizer(torch.tensor(text))[0])
+
+    def count_unknown(self, text: str) -> int:
+        unknown_sequence = [248059, 1]
+        # Convert both lists to string for easier matching
+        tokens = self.encode(text)
+        str_list = ",".join(map(str, tokens))
+        str_sub = ",".join(map(str, unknown_sequence))
+        str_list = str_list.replace(str_sub, "").strip(",")
+        non_unknown_tokens = [int(item) for item in str_list.split(",") if item]
+        text_wo_unk = self.decode(non_unknown_tokens)
+        return max(0, int(len(tokens)*(len(text)-len(text_wo_unk))/len(text)))
+
 
 ALL_TOKENIZERS = [
+    FacebookAI_SeamlessM4T,
     Qwen,
     LLAMA,
     OpenAI_GPT2,

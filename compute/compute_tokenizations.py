@@ -5,6 +5,7 @@ from typing import Type
 import pandas
 import os
 from collections import defaultdict
+import tqdm
 
 from tokenizer_interface import ALL_TOKENIZERS, TokenizerInterface
 
@@ -64,7 +65,7 @@ def process_one_language(lang, reverse=False):
     # save the examples:
     os.makedirs("assets/examples", exist_ok=True)
     df=pandas.DataFrame(examples_tokenized)
-    print(df)
+    # print(df)
     df.to_json(f"assets/examples/{lang}.json", force_ascii=False, indent=2)
 
     return dict_len, dict_unknown
@@ -74,10 +75,13 @@ def process_one_language(lang, reverse=False):
 _ = process_one_language(langs[0])
 
 # process all languages in parallel
-pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
-processed_dicts_list = pool.map(process_one_language, langs)
-pool.close()
-pool.join()
+# pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+# processed_dicts_list = pool.map(process_one_language, langs)
+processed_dicts_list = []
+for l in tqdm.tqdm(langs):
+    processed_dicts_list.append(process_one_language(l))
+# pool.close()
+# pool.join()
 
 # replace language code with language full name
 language_map = pandas.read_csv("compute/flores_language_map.csv", index_col=1, skipinitialspace=True)
