@@ -77,11 +77,12 @@ _ = process_one_language(langs[0])
 # process all languages in parallel
 # pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
 # processed_dicts_list = pool.map(process_one_language, langs)
+# pool.close()
+# pool.join()
+
 processed_dicts_list = []
 for l in tqdm.tqdm(langs):
     processed_dicts_list.append(process_one_language(l))
-# pool.close()
-# pool.join()
 
 # replace language code with language full name
 language_map = pandas.read_csv("compute/flores_language_map.csv", index_col=1, skipinitialspace=True)

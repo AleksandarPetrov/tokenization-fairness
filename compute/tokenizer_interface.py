@@ -353,8 +353,13 @@ class FacebookAI_SeamlessM4T(TokenizerInterface):
         return max(0, int(len(tokens)*(len(text)-len(text_wo_unk))/len(text)))
 
 
+class FacebookAI_NLLB(HuggingFaceTokenizer):
+    tokenizer = "facebook/nllb-200-distilled-600M"
+    tokenizer_name = "NLLB"
+
 ALL_TOKENIZERS = [
     FacebookAI_SeamlessM4T,
+    FacebookAI_NLLB,
     Qwen,
     LLAMA,
     OpenAI_GPT2,
