@@ -23,11 +23,11 @@ We also provide the computed table in the `assets` directory:
 **Cite as:**
 
 ```
-@article{petrov2023token_unfairness,
-  title = {Language Model Tokenizers Introduce Unfairness Between Languages},
-  author = {Petrov, Aleksandar and La Malfa, Emanuele and H. S. Torr, Philip and Bibi, Adel},
-  journal = {arXiv preprint: arXiv:2305.15425},
-  url={https://arxiv.org/abs/2305.15425},
-  year = {2023}
+@inproceedings{petrov2023token_unfairness,
+    title = {Language Model Tokenizers Introduce Unfairness Between Languages},
+    author = {Petrov, Aleksandar and La Malfa, Emanuele and H. S. Torr, Philip and Bibi, Adel},    
+    booktitle = {Advances in Neural Information Processing Systems},
+    url = {https://arxiv.org/abs/2305.15425},
+    year = {2023}
 }
 ```
