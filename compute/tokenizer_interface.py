@@ -324,6 +324,10 @@ class LLAMA(HuggingFaceTokenizer):
     tokenizer = "meta-llama/Llama-2-7b-chat-hf"
     tokenizer_name = "LLAMA"
 
+class Glot500(HuggingFaceTokenizer):
+    tokenizer = "cis-lmu/glot500-base"
+    tokenizer_name = "Glot500"
+
 class FacebookAI_SeamlessM4T(TokenizerInterface):
 
     pretty_name = "SeamlessM4T"
@@ -358,6 +362,7 @@ class FacebookAI_NLLB(HuggingFaceTokenizer):
     tokenizer_name = "NLLB"
 
 ALL_TOKENIZERS = [
+    Glot500,
     FacebookAI_SeamlessM4T,
     FacebookAI_NLLB,
     Qwen,
